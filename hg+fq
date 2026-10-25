@@ -1,0 +1,188 @@
+name: 番茄小说 + 红果短剧
+description: 番茄小说去广告 + 红果短剧广告拦截（合并版）
+author: merged
+icon: book.fill
+
+rules:
+  # ========== 番茄小说核心规则 ==========
+  - domain:
+      match: p6-ad-sign.byteimg.com
+      policy: REJECT
+  - domain:
+      match: p9-ad-sign.byteimg.com
+      policy: REJECT
+  - domain_suffix:
+      match: byteimg.com
+      policy: DIRECT
+  - domain:
+      match: i.snssdk.com
+      policy: REJECT
+  - domain:
+      match: i-lq.snssdk.com
+      policy: REJECT
+  - domain:
+      match: dig.bdurl.net
+      policy: REJECT
+  - domain_keyword:
+      match: zijieapi
+      policy: REJECT
+  - domain:
+      match: activity-ag.awemeughun.com
+      policy: REJECT
+  - domain:
+      match: mcs.snssdk.com
+      policy: REJECT
+  - domain:
+      match: tnc3-alisc1.snssdk.com
+      policy: REJECT
+  - domain:
+      match: security-lq.snssdk.com
+      policy: REJECT
+  - domain:
+      match: tnc3-aliec2.snssdk.com
+      policy: REJECT
+  - domain:
+      match: is.snssdk.com
+      policy: REJECT
+  - domain:
+      match: v6-novelapp.ixigua.com
+      policy: REJECT
+  - domain_wildcard:
+      match: "*novelapp.ixigua.com"
+      policy: REJECT
+  - domain_wildcard:
+      match: "*default.ixigua.com"
+      policy: REJECT
+  - domain:
+      match: msync-im1-vip6-std.easemob.com
+      policy: REJECT
+  - domain:
+      match: apd-pcdnwxlogin.teg.tencent-cloud.net
+      policy: REJECT
+  - domain:
+      match: api.iegadp.qq.com
+      policy: REJECT
+  - domain:
+      match: sf3-ttcdn-tos.pstatp.com
+      policy: REJECT
+  - domain_suffix:
+      match: pglstatp-toutiao.com
+      policy: REJECT
+  - domain_suffix:
+      match: byteorge.com
+      policy: REJECT
+  - domain_suffix:
+      match: bytegoofy.com
+      policy: REJECT
+  - domain_suffix:
+      match: bytedance.com
+      policy: REJECT
+  - ip_cidr:
+      match: 49.71.37.101/32
+      policy: REJECT
+      no_resolve: true
+  - ip_cidr:
+      match: 117.71.105.23/32
+      policy: REJECT
+      no_resolve: true
+  - ip_cidr:
+      match: 218.94.207.205/32
+      policy: REJECT
+      no_resolve: true
+  - ip_cidr:
+      match: 117.92.229.188/32
+      policy: REJECT
+      no_resolve: true
+  - ip_cidr:
+      match: 101.36.166.16/32
+      policy: REJECT
+      no_resolve: true
+  - ip_cidr:
+      match: 180.96.2.114/32
+      policy: REJECT
+      no_resolve: true
+
+  # ========== 红果短剧核心规则 ==========
+  - domain_suffix:
+      match: hongguoapp.com
+      policy: REJECT
+  - domain_suffix:
+      match: hongguosdk.com
+      policy: REJECT
+  - domain_suffix:
+      match: pangolin-sdk-toutiao.com
+      policy: REJECT
+  - domain_keyword:
+      match: ad-union-sdk
+      policy: REJECT
+  - domain_keyword:
+      match: be-pack
+      policy: REJECT
+  - domain_keyword:
+      match: hongguo.ad
+      policy: REJECT
+  - domain_suffix:
+      match: ad.pangle.cn
+      policy: REJECT
+  - domain_suffix:
+      match: ad.pangolin.cn
+      policy: REJECT
+  - domain_suffix:
+      match: zijieapi.com
+      policy: REJECT
+  - domain_keyword:
+      match: tnc.snssdk
+      policy: REJECT
+
+  # ========== 红果内容直连（避免加载异常） ==========
+  - domain_suffix:
+      match: hongguo.com
+      policy: DIRECT
+  - domain_suffix:
+      match: hongguo.douyin.com
+      policy: DIRECT
+  - domain_suffix:
+      match: pstatp.com
+      policy: DIRECT
+
+url_rewrites:
+  - match: ^https?:\/\/.+\.pangolin-sdk-toutiao\.com\/api\/ad\/union\/sdk\/(get_ads|stats|settings)\/
+    location: http://reject/
+  - match: ^https?:\/\/.+\.pglstatp-toutiao\.com\/.+\/toutiao\.mp4
+    location: http://reject/
+  - match: ^https?:\/\/.+\.(pglstatp-toutiao|pstatp)\.com\/(obj|img)\/(ad-app-package|ad)\/.+
+    location: http://reject/
+  - match: ^https?:\/\/.+\.(pglstatp-toutiao|pstatp)\.com\/(obj|img)\/web\.business\.image\/.+
+    location: http://reject/
+  - match: ^https?:\/\/.+\.(pglstatp-toutiao|pstatp)\.com\/obj\/ad-pattern\/renderer
+    location: http://reject/
+  - match: ^https?:\/\/gurd\.snssdk\.com\/src\/server\/v3\/package
+    location: http://reject/
+  - match: ^https?:\/\/.+\.byteimg.com/tos-cn-i-1yzifmftcy\/(.+)-jpeg\.jpeg
+    location: http://reject/
+  - match: ^https?:\/\/.+\.pstatp\.com\/obj\/mosaic-legacy\/.+\?from\=ad
+    location: http://reject/
+  - match: ^https?:\/\/.+\.pstatp\.com\/bytecom\/resource\/track-log\/src\/.+
+    location: http://reject/
+  - match: ^https?:\/\/.+\.snssdk\.com\/video\/play\/1\/toutiao\/.+\/mp4
+    location: http://reject/
+  - match: ^https?:\/\/.+\.snssdk.com\/api\/ad\/.+
+    location: http://reject/
+  - match: ^http:\/\/.+\.byteimg\.com\/ad-app-package
+    location: http://reject/
+  - match: ^http:\/\/.+\.byteimg\.com\/web\.business\.image
+    location: http://reject/
+  - match: ^https?:\/\/.+?\.snssdk\.com\/motor\/operation\/activity\/display\/config\/V2\/
+    location: http://reject/
+
+mitm:
+  hostnames:
+    - "*.pangolin-sdk-toutiao"
+    - "*.pangolin-sdk-toutiao.*"
+    - "*.pstatp.com"
+    - "*.pstatp.com.*"
+    - "*.pglstatp-toutiao.com.*"
+    - "*.pglstatp-toutiao.com"
+    - "gurd.snssdk.com"
+    - "gurd.snssdk.com.*"
+    - "*default.ixigua.com"
