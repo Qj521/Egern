@@ -1,0 +1,58 @@
+name: 笔盒影视净化
+description: |
+  笔盒影视——净化广告——优化页面
+  原作者：彭于晏💞
+  已转换为 Egern 格式
+  使用声明：仅供学习与交流，请勿转载与贩卖
+author: 彭于晏 (Egern 转换)
+homepage: https://t.me/py996
+
+# 需要 MITM 的域名
+mitm:
+  hostnames:
+    - api2.zwcdjpuxs.cc
+    - "*.zwcdjpuxs.cc"
+    - "*.zwntwhem.cc"
+    - p1.lpegbefn.com
+    - 48egbxgb.ewqder123.top
+    - "*.ewqder123.top"
+    - "*.bh68824.vip"
+
+# 拦截广告/统计域名
+url_rewrites:
+  - match: ^https?:\/\/ingest\.lputol\.com\/
+    location: http://reject/
+  - match: ^https?:\/\/www\.google-analytics\.com\/
+    location: http://reject/
+  - match: ^https?:\/\/ap\.dc-report\.cc\/
+    location: http://reject/
+  - match: ^https?:\/\/api-dc-prod-002\.cyou\/
+    location: http://reject/
+  - match: ^https?:\/\/api-dc2-prod-02\.cyou\/
+    location: http://reject/
+
+# 响应体脚本（请把 script_url 改成你本地实际路径，或使用远程链接）
+# 本地文件示例：file:///var/mobile/Library/Preferences/Egern/Scripts/bhys_egern.js
+# 也可把 bhys_egern.js 放到 Egern 可访问的目录后填写相对/绝对路径
+scriptings:
+  - http_response:
+      name: 笔盒影视-净化广告
+      match: ^https?:\/\/api[0-9]*\.[^\/]+\/api\.php\/api\/
+      script_url: "./bhys_egern.js"
+      body_required: true
+      max_size: 2097152
+      timeout: 30
+  - http_response:
+      name: 笔盒影视-API
+      match: ^https?:\/\/[^\/]+\.ewqder123\.top\/api\/
+      script_url: "./bhys_egern.js"
+      body_required: true
+      max_size: 2097152
+      timeout: 30
+  - http_response:
+      name: 笔盒影视-主JS去导航
+      match: ^https?:\/\/[^\/]+\/assets\/js\/main-[^\/]+\.js
+      script_url: "./bhys_egern.js"
+      body_required: true
+      max_size: 5242880
+      timeout: 30
