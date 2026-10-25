@@ -1,0 +1,32 @@
+name: "黄果 / 2048AI 去广告"
+description: "隐藏 huangguo.video、huangguoai.com 页面内的广告位，并拦截 2048ai.vip 的广告 / AI精选配置接口"
+author: "Custom"
+icon: "eye.slash"
+
+# HTTP 响应体正则替换：在 </head> 前插入一段 CSS，把对应的广告位 class 隐藏掉
+body_rewrites:
+  - response_regex:
+      match: "^https://huangguo\\.video"
+      find: "(?i)</head>"
+      replace: "<style>div.hg-exo-slot,div.hg-exo-slot-list,.hg-tile-slot-list{display:none!important}</style></head>"
+
+  - response_regex:
+      match: "^https://huangguoai\\.com"
+      find: "(?i)</head>"
+      replace: "<style>.hg-hero,.hg-ssp-slot,.hg-ssp-pause{display:none!important}</style></head>"
+
+# 请求拦截：命中广告 / AI 精选配置接口时，本地直接返回一个空字典（200），
+# 不再把请求发往服务器——相当于原规则里的 reject_dict(200)
+map_locals:
+  - match: "^https://2048ai\\.vip/api/v1/(?:ads|ai-selection/config)"
+    status_code: 200
+    headers:
+      Content-Type: application/json
+    body: "{}"
+
+# 以上规则都需要对这三个域名做 MITM 解密，否则 Egern 看不到 HTTPS 内容
+mitm:
+  hostnames:
+    - "huangguo.video"
+    - "huangguoai.com"
+    - "2048ai.vip"
