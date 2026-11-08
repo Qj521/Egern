@@ -1,8 +1,27 @@
-#!name=瓜子影视去广告（仅广告）
-#!desc=只去广告，保留底部入口，不影响体育频道 | 原作者 ddgksf2013
+#!name=瓜子影视去广告+精简入口
+#!desc=去广告 + 去掉AI剧场/游戏/阅读入口 | 保留其它底部入口
 #!category=ZenmoFeiShi
 
 [Body Rewrite]
+# 底部导航：去掉 AI剧场、游戏、阅读
+http-response-jq ^https:\/\/(?:api|sdapi|newapi|hyperf|oldapi)\.[a-z0-9]+\.com\/App\/Resource\/Config\/getNav '
+  if .data then
+    .data |= (
+      if type == "object" and has("list") then
+        .list |= map(select(
+          (.name // .title // .tabName // .label // "") | 
+          tostring | test("AI剧场|游戏|阅读|ai剧场|游戏中心|小说|书城") | not
+        ))
+      elif type == "array" then
+        map(select(
+          (.name // .title // .tabName // .label // "") | 
+          tostring | test("AI剧场|游戏|阅读|ai剧场|游戏中心|小说|书城") | not
+        ))
+      else . end
+    )
+  else . end
+'
+
 # 独立广告数据（已排除 sportAdInfo）
 http-response-jq ^https:\/\/(?:api|sdapi|newapi|hyperf|oldapi)\.[a-z0-9]+\.com\/App\/(?:Ad\/(?:activityInfo|bannerInfo|bardCacheAdInfo|barsIndexAdInfo|barsPlayAdInfo|barsUserAdInfo|comicAdInfo|liveEventAdInfo|noticeInfo|novelAdInfo|novelReaderAdInfo|playAdInfo|playGuidePopup|skitAdInfo|splashInfo|vajraInfo)|ad\/(?:trafficNavigationInfo|vajraList)) '.msg = "" | .message = "" | .data = null'
 
